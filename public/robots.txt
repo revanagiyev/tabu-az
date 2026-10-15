@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tabu-azerbaycan.com/sitemap.xml
+Sitemap: https://tabu-game-az.onrender.com/sitemap.xml
