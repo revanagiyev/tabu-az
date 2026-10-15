@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "Tabu Azərbaycan",
+  "short_name": "Tabu AZ",
+  "description": "Azərbaycan dilində ən maraqlı və əyləncəli Tabu söz oyunu",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F7C02B",
+  "theme_color": "#F7C02B",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

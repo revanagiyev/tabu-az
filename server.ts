@@ -341,6 +341,9 @@ ${safeExisting.length > 0 ? `- Bu sözləri təkrarlama: ${safeExisting.slice(-2
 // 4. Vite Server & Application Bootstrap
 // ==========================================
 async function bootstrap() {
+  // Always serve public directory directly for manifest.json, favicon.svg, robots.txt, sitemap.xml, verification files
+  app.use(express.static(path.resolve(__dirname, 'public')));
+
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.resolve(__dirname, 'dist')));
     app.get('*', (_req, res) => {

@@ -18,7 +18,7 @@ import { PauseOverlay } from './components/PauseOverlay';
 import { RoundSummaryModal } from './components/RoundSummaryModal';
 import { GameOverModal } from './components/GameOverModal';
 import { RulesModal } from './components/RulesModal';
-import { Play, HelpCircle, Loader2, Sparkles } from 'lucide-react';
+import { Play, HelpCircle, Loader2, Sparkles, Maximize, Minimize } from 'lucide-react';
 
 type ScreenState = 'HOME' | 'SETTINGS' | 'TEAMS' | 'PLAYING';
 
@@ -60,6 +60,43 @@ export default function App() {
   const [teams, setTeams] = useState<[Team, Team]>(INITIAL_TEAMS);
   const [activeTeamIndex, setActiveTeamIndex] = useState<0 | 1>(0);
   const [currentRound, setCurrentRound] = useState(1);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Monitor browser fullscreen state
+  useEffect(() => {
+    const handleFsChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', handleFsChange);
+    document.addEventListener('webkitfullscreenchange', handleFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFsChange);
+      document.removeEventListener('webkitfullscreenchange', handleFsChange);
+    };
+  }, []);
+
+  const toggleFullScreen = useCallback(() => {
+    haptics.trigger(30);
+    try {
+      if (!document.fullscreenElement) {
+        const docEl = document.documentElement as any;
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch(() => {});
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
+        }
+      } else {
+        const doc = document as any;
+        if (doc.exitFullscreen) {
+          doc.exitFullscreen().catch(() => {});
+        } else if (doc.webkitExitFullscreen) {
+          doc.webkitExitFullscreen();
+        }
+      }
+    } catch {
+      // Ignored if browser denies fullscreen without user gesture
+    }
+  }, []);
 
   // Cards & game engine
   const [allCards, setAllCards] = useState<TabuCard[]>(AZERBAIJANI_TABOO_CARDS);
@@ -545,7 +582,7 @@ export default function App() {
   const activeTeam = teams[activeTeamIndex];
 
   return (
-    <div className="bg-[#F7C02B] text-slate-900 flex flex-col font-sans select-none h-screen max-h-screen overflow-hidden">
+    <div className="bg-[#F7C02B] text-slate-900 flex flex-col font-sans select-none h-[100dvh] max-h-[100dvh] overflow-hidden overscroll-none">
       {/* Top Header - Controlled per screen */}
       {currentScreen === 'SETTINGS' && (
         <SettingsTopBar
@@ -554,6 +591,8 @@ export default function App() {
           vibrationEnabled={vibrationEnabled}
           onToggleVibration={handleToggleVibration}
           onOpenRules={() => setIsRulesOpen(true)}
+          isFullscreen={isFullscreen}
+          onToggleFullScreen={toggleFullScreen}
         />
       )}
 
@@ -566,6 +605,8 @@ export default function App() {
           onOpenRules={() => setIsRulesOpen(true)}
           customSpeechText="Tərəfləri seçməyin vaxtıdır !"
           showRulesButton={false}
+          isFullscreen={isFullscreen}
+          onToggleFullScreen={toggleFullScreen}
         />
       )}
 
@@ -574,11 +615,24 @@ export default function App() {
         {/* ================= 1. HOME SCREEN ================= */}
         {currentScreen === 'HOME' && (
           <div className="w-full max-w-md h-full flex flex-col items-center justify-between py-1 relative animate-in fade-in zoom-in-95 duration-200">
-            {/* Top floating controls: Help (?) and Settings Popover (Sound & Vibration) */}
+            {/* Top floating controls: Fullscreen, Help (?) and Settings Popover (Sound & Vibration) */}
             <div className="w-full flex items-center justify-end gap-2 pt-1 px-1 z-30">
               <button
+                onClick={toggleFullScreen}
+                className="w-9 h-9 rounded-xl bg-white neo-box-sm flex items-center justify-center text-[#18181B] hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
+                title={isFullscreen ? 'Tam ekrandan çıx' : 'Tam ekran rejimi'}
+                aria-label="Tam ekran rejimi"
+              >
+                {isFullscreen ? (
+                  <Minimize className="w-4 h-4 stroke-[2.5]" />
+                ) : (
+                  <Maximize className="w-4 h-4 stroke-[2.5]" />
+                )}
+              </button>
+
+              <button
                 onClick={() => setIsRulesOpen(true)}
-                className="w-9 h-9 rounded-xl bg-white neo-box-sm flex items-center justify-center text-[#18181B] hover:bg-slate-50 transition-all active:scale-95"
+                className="w-9 h-9 rounded-xl bg-white neo-box-sm flex items-center justify-center text-[#18181B] hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
                 title="Qaydalar"
                 aria-label="Qaydalar"
               >
@@ -684,6 +738,8 @@ export default function App() {
         vibrationEnabled={vibrationEnabled}
         onToggleVibration={handleToggleVibration}
         onOpenRules={() => setIsRulesOpen(true)}
+        isFullscreen={isFullscreen}
+        onToggleFullScreen={toggleFullScreen}
         onResetGame={() => {
           setIsPaused(false);
           setCurrentScreen('HOME');

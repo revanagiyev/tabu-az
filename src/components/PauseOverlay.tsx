@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, Volume2, VolumeX, Smartphone, HelpCircle, RotateCcw, Home } from 'lucide-react';
+import { Play, Volume2, VolumeX, Smartphone, HelpCircle, RotateCcw, Home, Maximize, Minimize } from 'lucide-react';
 
 interface PauseOverlayProps {
   isOpen: boolean;
@@ -12,6 +12,8 @@ interface PauseOverlayProps {
   onToggleVibration: () => void;
   onOpenRules: () => void;
   onResetGame: () => void;
+  isFullscreen?: boolean;
+  onToggleFullScreen?: () => void;
 }
 
 export const PauseOverlay: React.FC<PauseOverlayProps> = ({
@@ -24,6 +26,8 @@ export const PauseOverlay: React.FC<PauseOverlayProps> = ({
   onToggleVibration,
   onOpenRules,
   onResetGame,
+  isFullscreen,
+  onToggleFullScreen,
 }) => {
   if (!isOpen) return null;
 
@@ -130,6 +134,26 @@ export const PauseOverlay: React.FC<PauseOverlayProps> = ({
                 {vibrationEnabled ? 'Açıq' : 'Bağlı'}
               </span>
             </button>
+
+            {/* Option: Fullscreen Toggle */}
+            {onToggleFullScreen && (
+              <button
+                onClick={onToggleFullScreen}
+                className="w-full py-2.5 sm:py-3 px-3.5 rounded-2xl bg-[#F0FDF4] hover:bg-[#DCFCE7] text-[#15803D] neo-box-sm border-2 border-[#18181B] flex items-center justify-between font-heading font-bold text-xs sm:text-sm transition-all active:scale-98"
+              >
+                <div className="flex items-center gap-2.5">
+                  {isFullscreen ? (
+                    <Minimize className="w-4.5 h-4.5 text-[#16A34A]" />
+                  ) : (
+                    <Maximize className="w-4.5 h-4.5 text-[#16A34A]" />
+                  )}
+                  <span>{isFullscreen ? 'Pəncərə rejiminə keç' : 'Tam ekran rejimi'}</span>
+                </div>
+                <span className="text-[10px] font-black bg-[#16A34A] text-white px-2 py-0.5 rounded-lg">
+                  {isFullscreen ? 'Tam' : 'Aç'}
+                </span>
+              </button>
+            )}
 
             {/* Option 4: Game Rules */}
             <button

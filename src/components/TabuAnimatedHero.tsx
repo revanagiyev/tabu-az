@@ -5,7 +5,7 @@ import { TabuBookMascot } from './TabuBookMascot';
 
 export const TabuAnimatedHero: React.FC = () => {
   return (
-    <div className="relative w-full max-w-[340px] sm:max-w-[390px] h-[230px] sm:h-[250px] flex items-center justify-center select-none -mt-3 sm:-mt-4">
+    <div className="relative w-full max-w-[340px] sm:max-w-[390px] h-[175px] sm:h-[220px] max-h-[28dvh] flex items-center justify-center select-none -mt-1 sm:-mt-3">
       {/* Floating background decorative aura */}
       <motion.div
         animate={{

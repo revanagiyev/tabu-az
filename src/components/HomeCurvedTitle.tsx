@@ -11,7 +11,7 @@ export const HomeCurvedTitle: React.FC = () => {
           scale: [0.99, 1.02, 0.99],
         }}
         transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-        className="w-full h-[115px] sm:h-[130px] relative flex items-center justify-center"
+        className="w-full h-[90px] sm:h-[120px] relative flex items-center justify-center"
       >
         <svg
           viewBox="0 0 400 125"

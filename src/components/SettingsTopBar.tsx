@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, Maximize, Minimize } from 'lucide-react';
 import { SettingsPopover } from './SettingsPopover';
 import { TabuBookMascot } from './TabuBookMascot';
 
@@ -12,6 +12,8 @@ interface SettingsTopBarProps {
   onOpenRules: () => void;
   customSpeechText?: string;
   showRulesButton?: boolean;
+  isFullscreen?: boolean;
+  onToggleFullScreen?: () => void;
 }
 
 export const SettingsTopBar: React.FC<SettingsTopBarProps> = ({
@@ -22,6 +24,8 @@ export const SettingsTopBar: React.FC<SettingsTopBarProps> = ({
   onOpenRules,
   customSpeechText,
   showRulesButton = true,
+  isFullscreen,
+  onToggleFullScreen,
 }) => {
   const [speechText, setSpeechText] = useState('');
   const [showBubble, setShowBubble] = useState(false);
@@ -140,8 +144,23 @@ export const SettingsTopBar: React.FC<SettingsTopBarProps> = ({
           </div>
         </div>
 
-        {/* Right: Help & Settings Popover Buttons */}
+        {/* Right: Fullscreen, Help & Settings Popover Buttons */}
         <div className="flex items-center gap-1.5 shrink-0 z-30">
+          {onToggleFullScreen && (
+            <button
+              onClick={onToggleFullScreen}
+              className="w-8 h-8 rounded-xl bg-white neo-box-sm flex items-center justify-center text-[#18181B] hover:bg-slate-50 transition-all active:scale-95"
+              title={isFullscreen ? "Tam ekrandan çıx" : "Tam ekran et"}
+              aria-label="Tam ekran rejimi"
+            >
+              {isFullscreen ? (
+                <Minimize className="w-3.5 h-3.5 stroke-[2.5]" />
+              ) : (
+                <Maximize className="w-3.5 h-3.5 stroke-[2.5]" />
+              )}
+            </button>
+          )}
+
           {showRulesButton && (
             <button
               onClick={onOpenRules}
